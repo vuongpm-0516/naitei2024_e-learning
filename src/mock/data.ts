@@ -77,6 +77,10 @@ export const users = <User[]>[
     username: 'anhctp',
     name: 'Cao Thi Phuong Anh',
     role: UserRole.ADMIN,
+    phone: '0123456789',
+    about: 'I am a software engineer',
+    birthday: new Date('2003-01-01'),
+    avatar_url: '/images/avatar.png',
   },
   {
     id: '2',
@@ -84,6 +88,10 @@ export const users = <User[]>[
     username: 'anhctp.student',
     name: 'Cao Thi Phuong Anh Student',
     role: UserRole.STUDENT,
+    phone: '0123456789',
+    about: 'I am a software engineer',
+    birthday: new Date('2003-01-01'),
+    avatar_url: '/images/avatar.png',
   },
   {
     id: '3',
@@ -91,6 +99,10 @@ export const users = <User[]>[
     username: 'anhctp.instructor',
     name: 'Cao Thi Phuong Anh Instructor',
     role: UserRole.INSTRUCTOR,
+    phone: '0123456789',
+    about: 'I am a software engineer',
+    birthday: new Date('2003-12-01'),
+    avatar_url: '/images/avatar.png',
   },
 ];
 
