@@ -52,14 +52,21 @@ block content
       .mb-6
       .flex.justify-between.items-center.mb-6
         h2.text-xl.font-bold #{t('user.detail.courses')}
-        a.text-teal-500(href="#") #{t('user.detail.see_all')}
       div(class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6")
-        each course in courseRecommends
-          .bg-gray-50.rounded-lg.overflow-hidden
-            .flex.justify-center.items-center.h-48
-              img(src='/images/python.png' alt='Image' class='h-full')
-            .p-4
-              h3.font-semibold.mb-2= course.name
-              p.text-sm.text-gray-600.mb-4= course.description
-              .flex.justify-between.items-center.text-sm.text-gray-500
-                span= `${course.level} • ${course.duration}`
+        each course in userCourses
+          a.block.bg-white.shadow-md.rounded-lg.p-4.mt-4.transition-all.duration-300.ease-in-out(
+            class="hover:shadow-xl hover:scale-105 cursor-pointer"
+            href=`/courses/${course.id}`
+          )
+            .rounded-lg.overflow-hidden
+              .flex.justify-center.items-center.h-48
+                img(
+                  src= (course.image_url === null) ? '/images/course.png' : course.image_url
+                  alt='Image'
+                  class='h-full'
+                )
+              .p-4
+                h3.font-semibold.mb-2= course.name
+                p.text-sm.text-gray-600.mb-4= course.description
+                .flex.justify-between.items-center.text-sm.text-gray-500
+                  span= `${course.level} • ${course.duration}`

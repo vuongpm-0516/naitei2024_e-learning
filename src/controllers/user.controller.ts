@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import asyncHandler from 'express-async-handler';
 import * as userServices from '../services/user.services';
+import * as courseServices from '../services/course.services';
 import { users, courseRecommends } from '../mock/data';
 import { UserRole } from '../enums/UserRole';
 
@@ -39,9 +40,11 @@ export const getUserById = asyncHandler(
       return next(Error(req.t('error.userNotFound')));
     }
 
+    const userCourses = await courseServices.getUserCourseList(user);
+
     res.render('users/detail', {
       title: req.t('title.user_detail'),
-      courseRecommends,
+      userCourses,
       user,
       UserRole,
     });
