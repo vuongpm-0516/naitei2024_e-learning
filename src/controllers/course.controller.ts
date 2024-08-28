@@ -6,6 +6,7 @@ import i18next from 'i18next';
 import * as courseService from '../services/course.service';
 import * as lessonService from '../services/lesson.service';
 import * as userService from '../services/user.service';
+import * as examService from '../services/exam.service';
 import { Course } from '../entity/course.entity';
 import { CourseLevel } from '../enums/CourseLevel';
 import { CourseWithEnrollStatus } from '../helpers/course.helper';
@@ -210,6 +211,8 @@ export const courseManageGet = asyncHandler(
         enrollmentWithProgress.push({ ...enrollment, progress, courseStatus });
       }
 
+      const exam = await examService.getExamByCourseId(course.id);
+
       res.render('courses/manage', {
         title: req.t('title.course_detail'),
         course,
@@ -220,6 +223,7 @@ export const courseManageGet = asyncHandler(
           (currentLessonPage - 1) * LIMIT_RECORDS,
           currentLessonPage * LIMIT_RECORDS
         ),
+        exam,
         currentLessonPage,
         totalLessonPages,
         LIMIT_RECORDS,

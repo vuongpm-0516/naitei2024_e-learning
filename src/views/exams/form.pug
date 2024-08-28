@@ -1,0 +1,55 @@
+extends ../layout
+
+block content
+  .flex.justify-center.items-center
+    .w-full.max-w-lg
+      h1.text-2xl.font-bold.mb-4 Create Exam
+      form.max-w-lg(method='POST')
+        .mb-4
+          label.block.mb-2(for='name') Name
+          input#name.w-full.px-3.py-2.border.rounded(
+            type='text',
+            name='name',
+            value=exam === undefined ? '' : exam.name,
+            required
+          )
+        .mb-4
+          label.block.mb-2(for='description') Description
+          textarea#description.w-full.px-3.py-2.border.rounded(
+            name='description'
+          ) #{ exam===undefined ? '' : exam.description }
+        .mb-4
+          label.block.mb-2(for='deadline') Deadline
+          input#deadline.w-full.px-3.py-2.border.rounded(
+            type='datetime-local',
+            name='deadline',
+            value=exam === undefined ? '' : exam.deadline
+          )
+        .mb-4
+          label.block.mb-2(for='timeLimit') Time Limit (minutes)
+          input#timeLimit.w-full.px-3.py-2.border.rounded(
+            type='number',
+            name='time_limit',
+            value=exam && exam.time_limit ? exam.time_limit.toString() : ''
+          )
+          if errors && errors.find(err => err.param === 'time_limit')
+            p.text-red-500.text-sm.italic= t('exam.errors.time_limit')
+        .mb-4
+          label.block.mb-2(for='attemptLimit') Attempt Limit
+          input#attemptLimit.w-full.px-3.py-2.border.rounded(
+            type='number',
+            name='attempt_limit',
+            value=exam && exam.attempt_limit ? exam.attempt_limit.toString() : ''
+          )
+          if errors && errors.find(err => err.param === 'attempt_limit')
+            p.text-red-500.text-sm.italic= t('exam.errors.attempt_limit')
+        .mb-4
+        .flex.justify-end.items-center.space-x-4
+          a.inline-block.font-bold.text-sm.text-white.bg-red-500.py-2.px-4.rounded(
+            class='hover:bg-red-600',
+            href=`/courses/${courseID}/manage`
+          ) Cancel
+          button#saveButton.inline-block.bg-green-500.text-sm.text-white.font-bold.py-2.px-4.rounded(
+            class='hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed',
+            type='submit'
+          ) Save

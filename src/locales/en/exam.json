@@ -21,6 +21,11 @@
     "feedback": "Feedback",
     "grade": "Grade",
     "studentName": "Student name",
-    "listGradeTitle": "List of Student Exam Submissions"
+    "listGradeTitle": "List of Student Exam Submissions",
+    "no_questions": "This exam has no questions.",
+    "errors": {
+      "time_limit": "Time limit must not be less than 5 minutes",
+      "attempt_limit": "Attempt limit must be greater than 0"
+    }
   }
 }

@@ -1,0 +1,97 @@
+extends ../layout
+
+block content
+  .flex.justify-center.items-center
+    .w-full
+      .flex.justify-between
+        h1.text-2xl.font-bold.mb-4 Edit Exam
+        .flex.justify-end.items-center.space-x-4
+          a.inline-block.font-bold.text-sm.text-white.bg-red-500.py-2.px-4.rounded(
+            class='hover:bg-red-600',
+            href=`/courses/${courseID}/manage`
+          ) Cancel
+          button#saveButton.inline-block.bg-green-500.text-sm.text-white.font-bold.py-2.px-4.rounded(
+            class='hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed',
+            type='submit'
+          ) Save
+      form(method='POST')
+        .mb-4
+          label.font-bold.block.mb-2(for='name') Name
+          input#name.w-full.px-3.py-2.border.rounded(
+            type='text',
+            name='name',
+            value=exam === undefined ? '' : exam.name,
+            required
+          )
+        .mb-4
+          label.font-bold.block.mb-2(for='description') Description
+          textarea#description.w-full.px-3.py-2.border.rounded(
+            name='description'
+          ) #{ exam===undefined ? '' : exam.description }
+        .flex.items-center.justify-between
+          .mb-4
+            label.font-bold.block.mb-2(for='deadline') Deadline
+            - const deadlineTime = new Date(exam.deadline);
+            - const offset = new Date().getTimezoneOffset();
+            - deadlineTime.setMinutes(deadlineTime.getMinutes() - offset);
+            input#deadline.w-full.px-3.py-2.border.rounded(
+              type='datetime-local',
+              name='deadline',
+              value=exam === undefined ? '' : deadlineTime.toISOString().slice(0, 16)
+            )
+          .mb-4
+            label.font-bold.block.mb-2(for='timeLimit') Time Limit (minutes)
+            input#timeLimit.w-full.px-3.py-2.border.rounded(
+              type='number',
+              name='time_limit',
+              value=exam && exam.time_limit ? exam.time_limit.toString() : ''
+            )
+            if errors && errors.find(err => err.param === 'time_limit')
+              p.text-red-500.text-sm.italic= t('exam.errors.time_limit')
+          .mb-4
+            label.font-bold.block.mb-2(for='attemptLimit') Attempt Limit
+            input#attemptLimit.w-full.px-3.py-2.border.rounded(
+              type='number',
+              name='attempt_limit',
+              value=exam && exam.attempt_limit ? exam.attempt_limit.toString() : ''
+            )
+            if errors && errors.find(err => err.param === 'attempt_limit')
+              p.text-red-500.text-sm.italic= t('exam.errors.attempt_limit')
+
+      // Manage questions and options here
+      .flex.items-center.justify-between
+        h1.text-2xl.font-bold.mt-6.mb-4 Questions
+        a.inline-block.text-sm.text-white.bg-blue-500.py-2.px-4.rounded(
+          class='hover:bg-blue-600',
+          href=`/exams/${exam.id}/questions/create`
+        ) Add Question
+
+      if exam.questions.length > 0
+        table.w-full.border.border-collapse
+          thead
+            tr
+              th.px-4.py-2.border.border-collapse.text-left Question
+              th.px-4.py-2.border.border-collapse.text-left Options
+              th.px-4.py-2.border.border-collapse.text-left Actions
+          tbody
+            each question in exam.questions
+              tr
+                td.px-4.py-2.border.border-collapse= question.content
+                td.px-4.py-2.border.border-collapse
+                  ul
+                    each option in question.options
+                      if option.is_correct
+                        li.bg-green-100.text-green-800= option.content
+                      else
+                        li= option.content
+                td.px-4.py-2.border.border-collapse
+                  a.inline-block.text-sm.text-white.bg-blue-500.py-2.px-4.mr-3.rounded(
+                    class='hover:bg-blue-600',
+                    href=`/exams/${exam.id}/questions/${question.id}/edit`
+                  ) Edit
+                  a.inline-block.text-sm.text-white.bg-red-500.py-2.px-4.rounded(
+                    class='hover:bg-red-600',
+                    href=`/exams/${exam.id}/questions/${question.id}/delete`
+                  ) Delete
+      else
+        p.text-sm= t('exam.no_questions')

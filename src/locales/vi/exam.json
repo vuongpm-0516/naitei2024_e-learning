@@ -21,6 +21,11 @@
     "feedback": "Nhận xét",
     "grade": "Điểm",
     "studentName": "Tên học viên",
-    "listGradeTitle": "Danh sách bài thi của học viên"
+    "listGradeTitle": "Danh sách bài thi của học viên",
+    "no_questions": "Bài thi này chưa có câu hỏi nào.",
+    "errors": {
+      "time_limit": "Thời gian làm bài không được nhỏ hơn 5 phút",
+      "attempt_limit": "Số lần làm bài phải lớn hơn 0"
+    }
   }
 }

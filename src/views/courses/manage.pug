@@ -1,5 +1,9 @@
 extends ../layout
 
+mixin formatDate(date)
+  - const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+  .text-gray-500.italic= date.toLocaleString('en-US', options)
+
 block content
   #modal.fixed.inset-0.flex.items-center.justify-center.z-50.bg-black.bg-opacity-50(
     class=undefined === enrollmentIdDelete ? 'hidden' : ''
@@ -340,6 +344,43 @@ block content
                 d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z',
                 clip-rule='evenodd'
               )
+    // Exam management
+    .flex.justify-between.items-center.mt-6
+      h2.text-xl.font-bold.my-4 #{ t('title.exam') }
+      if exam
+        a.px-3.rounded.text-sm.tracking-wider.font-medium.border-2.border-red-500.text-red-500.py-2(
+          href=`/courses/${course.id}/exam/${exam.id}/update`,
+          class='hover:bg-red-100'
+        ) #{ t('title.edit_exam') }
+      else
+        a.px-3.rounded.text-sm.tracking-wider.font-medium.border-2.border-teal-500.outline-none.bg-transparent.text-teal-500.py-2(
+          href=`/courses/${course.id}/exam/create`,
+          class='hover:bg-teal-100'
+        ) #{ t('title.create_exam') }
+
+    if exam
+      .flex.justify-start.text-xl.italic.font-bold.mb-2
+        p #{ exam.name }
+
+      if exam.time_limit
+        .flex.items-center.gap-1.mb-2
+          strong Time:
+          p #{ exam.time_limit } minutes
+
+      if exam.attempt_limit
+        .flex.items-center.gap-1.mb-2
+          strong Total attempt:
+          p #{ exam.attempt_limit }
+
+      .flex.justify-between.mb-2
+        .flex.items-center.gap-1
+          strong #{ t('exam.deadline') }:
+          +formatDate(new Date(exam.deadline))
+      .pb-2
+        strong #{ t('exam.description') }:
+        p #{ exam.description }
+    else
+      p This course has no exam yet. Please create one.
 
     // Progress
     .flex.justify-between.items-center.my-8

@@ -7,6 +7,7 @@ import { Option } from '../entity/option.entity';
 import { AppDataSource } from '../config/data-source';
 import { AssignmentStatus } from '../enums/AssignmentStatus';
 import { RATE_PASS } from '../constants';
+import { Course } from '../entity/course.entity';
 
 const gradeRepository = AppDataSource.getRepository(Grade);
 const questionRepository = AppDataSource.getRepository(Question);
@@ -108,7 +109,7 @@ export const updateGradeWhenSubmitExam = async (
 
 export const getExamById = async (examId: string) => {
   const exam = await examRepository.findOne({
-    relations: ['course'],
+    relations: ['course', 'questions', 'questions.options'],
     where: {
       id: examId,
     },
@@ -318,4 +319,52 @@ export const updateGradeById = async (
   });
   Object.assign(gradeObject, gradeUpdate);
   return await gradeRepository.save(gradeObject);
+};
+export const getExamByCourseId = async (courseId: string) => {
+  const exam = await examRepository.findOne({
+    where: {
+      course: {
+        id: courseId,
+      },
+    },
+    relations: ['course'],
+  });
+  return exam;
+};
+
+export const createExam = async (
+  attribute: Record<string, string>,
+  courseId: string
+) => {
+  const { name, description, deadline, time_limit, attempt_limit } = attribute;
+  const course = await AppDataSource.getRepository(Course).findOne({
+    where: {
+      id: courseId,
+    },
+  });
+  if (!course) return;
+  const exam = new Assignment({
+    name,
+    description,
+    deadline: new Date(deadline),
+    time_limit: Number(time_limit),
+    attempt_limit: Number(attempt_limit),
+    course,
+  });
+  return examRepository.save(exam);
+};
+
+export const updateExam = async (
+  examId: string,
+  attribute: Record<string, string>
+) => {
+  const exam = await getExamById(examId);
+  if (!exam) return;
+  const { name, description, deadline, time_limit, attempt_limit } = attribute;
+  exam.name = name;
+  exam.description = description;
+  exam.deadline = new Date(deadline);
+  exam.time_limit = Number(time_limit);
+  exam.attempt_limit = Number(attempt_limit);
+  return examRepository.save(exam);
 };
