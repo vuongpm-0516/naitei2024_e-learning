@@ -66,8 +66,12 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
+    environment:
+      DOMAIN: ${DOMAIN}
+      PORT: ${PORT}
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/templates:/etc/nginx/templates
     depends_on:
       web:
         condition: service_started
