@@ -1,8 +1,59 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 
-DROP DATABASE IF EXISTS `e_learning_test`;
-CREATE DATABASE IF NOT EXISTS `e_learning_test`;
-USE `e_learning_test`;
+DROP DATABASE IF EXISTS `e_learning`;
+CREATE DATABASE IF NOT EXISTS `e_learning`;
+USE `e_learning`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` varchar(36) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `hash_password` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `role` enum('Admin','Instructor','Student','Pending Approval') NOT NULL DEFAULT 'Student',
+  `name` varchar(255) NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `avatar_url` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `about` varchar(255) DEFAULT NULL,
+  `specialization` enum('Software Engineering','Data Science','Cyber Security','Networking','AI Machine Learning','None') NOT NULL DEFAULT 'None',
+  `googleId` varchar(255) DEFAULT NULL,
+  `auth_type` enum('local','google','facebook','github') NOT NULL DEFAULT 'local',
+  `authCode` varchar(255) DEFAULT NULL,
+  `authCodeExpires` datetime DEFAULT NULL,
+  `isVerify` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `hash_password`, `username`, `role`, `name`, `birthday`, `avatar_url`, `phone`, `about`, `specialization`, `googleId`, `auth_type`, `authCode`, `authCodeExpires`, `isVerify`) VALUES
+('00e813f9-59f4-40aa-bd60-1825d7606314', 'nguyen.quang.anh@sun-asterisk.com', '$2b$10$cBvpEOwiSgshDbkhyi1.h.chwJDUydU9eXXcU1rAAwuu4utoCSIqC', 'anhnq', 'Instructor', 'Nguyen Quang Anh', '2003-11-26', 'https://res.cloudinary.com/duminopj4/image/upload/v1723566594/avatars/j85gdmulf989lmwkbtjq.png', '0163456789', 'Data Engineer', 'Software Engineering', NULL, 'local', NULL, NULL, NULL),
+('123878ff-cd3d-4c94-aee3-cab0e0f6b27e', 'phamminhv@gmail.com', '$2b$10$WUum/TayekSCg7P2Guq69.aX02txwngO6Mfmo7uuMf6MdErhHjcwS', 'pmv', 'Instructor', 'Pham Minh Vuong', NULL, 'https://img.freepik.com/premium-photo/teacher-man-avatar-icon-illustration-vector-style_131965-789.jpg', NULL, 'Fullstack Engineer', 'Software Engineering', NULL, 'local', '', '2024-08-27 09:14:43', 1),
+('33202650-2e46-47b8-990b-a00b30b1897a', '21020425@vnu.edu.vn', '$2b$10$LpVhpxN860EUzFNOp1mtKu0XxjEjO4/ofqas/o.Spw3xvYhkslPi.', 'pmv21020425', 'Student', 'Phạm Minh Vương', NULL, 'https://res.cloudinary.com/duminopj4/image/upload/v1724822294/avatars/rfeijbthorjtzjb67jjz.png', '', '', 'Software Engineering', NULL, 'local', NULL, NULL, NULL),
+('378e1954-1a85-458b-bfa1-d904070f1d58', 'pham.thi.hong.ngan@sun-asterisk.com', '$2b$10$icM9rab8qK4mTumhXFIhMOGVay16oCHZkArBfWnXhpJ4H/z9NhaWK', 'nganpth', 'Student', 'Pham Thi Hong Ngan', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
+('531fcba4-b7cd-45da-8ec3-184b8e88e949', 'admin@sun-asterisk.com', '$2b$10$DjxAkWALpyHKWtdxyxCwYO4l5ZF7jyRcRTBr56OOruPLelb8El.cy', 'admin', 'Admin', 'Admin', NULL, 'https://visualpharm.com/assets/381/Admin-595b40b65ba036ed117d3b23.svg', NULL, 'Administrator of the e-learning system', '', NULL, 'local', '389810', '2024-08-26 14:55:26', 1),
+('54a859af-3995-441b-9537-695ae8215f7f', 'pham.minh.vuong@sun-asterisk.com', '$2b$10$BLbF9caDi4vwDoamEtdRJu.3P8eDhwDXlZrq3j8LBHvuA2nsezIjm', 'Pham', 'Student', 'Pham Minh Vuong', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocJztVisEp1b8SQ9_VFa8bLrr--dY2A8g_LAaq2LG49HWZdbtw=s96-c', NULL, NULL, '', '101793049225580013760', 'google', NULL, NULL, NULL),
+('5877df58-ad78-4833-8b04-175e72b6e3db', 'phamminhvuong@sun-asterisk.com', '$2b$10$WG07nnnu2oTuocMBH.j99.GUsqMfsgtPvyQExBp3pFivu.VaeZlzG', 'vuongpm-0516', 'Student', 'Phạm Minh Vương', '2003-07-11', 'https://res.cloudinary.com/duminopj4/image/upload/v1723599243/avatars/wuw6y3cvthh3nj5t8itm.png', '0365011703', '', 'Software Engineering', NULL, 'local', '443580', '2024-08-26 17:32:40', 1),
+('66aea26c-394a-4cd0-bfe7-4237b7391c35', 'phamminhv26@gmail.com', '$2b$10$RIdSCKHxfUFeEePhflqJKOr8HWdP954mctkx5JkUPZNC8pfrmFDTm', 'NewInstructor', 'Instructor', 'Nguyen Xuan Hoa', NULL, NULL, NULL, '', 'Software Engineering', NULL, 'local', '', '2024-08-27 09:43:27', 1),
+('7b1719e9-338a-4f8e-a8e3-918c8f9663c3', 'cao.thi.phuong.anh@sun-asterisk.com', '$2b$10$8Am90XB9ErV./evmEAvlgubarZXfz1euBTqUuIsXrxu.5vZ6Vyosm', 'anhctp', 'Student', 'Cao Thi Phuong Anh', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
+('8f2e6682-dc87-484f-929b-abac2e193963', 'pmv@vnu.edu.vn', '$2b$10$omQrH5lNMvwvpzt1kWKVC.8YsUOb/BYIb6LRrmnKfJh/Pra1Z..P2', '21020425', 'Student', '21020425 Phạm Minh Vương', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocJpyghwyPptuWuJyOY6dbmZZ3jysRGpFEtN-tapQpbfIQYRPIYv=s96-c', NULL, NULL, '', '107661232468707080560', 'google', NULL, NULL, NULL),
+('ad11ffa9-f4b0-4e8b-bbf0-e0f16c3854ce', 'zuanki@gmail.com', '$2b$10$dzOiO8hEwb/gjc4uPgaMWudDud43ta32ObURJP/WuWALjrk/CKYa2', 'hoanx', 'Instructor', 'Nguyen Xuan Hoa', '2003-07-31', 'https://res.cloudinary.com/duminopj4/image/upload/v1724554351/avatars/ghbmb6q83mdbmmh6rhc6.jpg', '0123456789', 'AI Engineer', 'AI Machine Learning', NULL, 'local', '625962', '2024-08-26 14:53:37', 1),
+('b6281679-02c0-4543-a7fb-210429105267', 'harry@gmail.com', '$2b$10$4vkwdob2tienYniKNc3AiOQbf7.evvwc7H9LH4StoNVAkGy3r5ulK', 'kane', 'Student', 'Harry Kane', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
+('fc8ebe65-85b5-4a05-a13e-7ee5307ec67a', 'phamminh@gmail.com', '$2b$10$tn0ShXtn5sNOwpRdtGOkwOfnlGN1rnHhyiEqC8B/syFKrIv7Yf.Yi', 'minhvuong', 'Pending Approval', 'Pham Minh Vuong', NULL, NULL, NULL, '', 'Cyber Security', NULL, 'local', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answers`
+--
 
 CREATE TABLE `answers` (
   `id` varchar(36) NOT NULL,
@@ -707,50 +758,6 @@ INSERT INTO `student_lesson` (`id`, `done`, `student_id`, `lesson_id`) VALUES
 ('sl7d1e4f1-223b-4cdd-9f0e-0123456789a', 1, '5877df58-ad78-4833-8b04-175e72b6e3db', 'l7d1e4f1-223b-4cdd-9f0e-0123456789ab'),
 ('sl8d1e4f1-223b-4cdd-9f0e-0123456789a', 1, '5877df58-ad78-4833-8b04-175e72b6e3db', 'l8d1e4f1-223b-4cdd-9f0e-0123456789ab'),
 ('sl9d1e4f1-223b-4cdd-9f0e-0123456789a', 0, '5877df58-ad78-4833-8b04-175e72b6e3db', 'l9d1e4f1-223b-4cdd-9f0e-0123456789ab');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` varchar(36) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `hash_password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `role` enum('Admin','Instructor','Student','Pending Approval') NOT NULL DEFAULT 'Student',
-  `name` varchar(255) NOT NULL,
-  `birthday` date DEFAULT NULL,
-  `avatar_url` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `about` varchar(255) DEFAULT NULL,
-  `specialization` enum('Software Engineering','Data Science','Cyber Security','Networking','AI Machine Learning','None') NOT NULL DEFAULT 'None',
-  `googleId` varchar(255) DEFAULT NULL,
-  `auth_type` enum('local','google','facebook','github') NOT NULL DEFAULT 'local',
-  `authCode` varchar(255) DEFAULT NULL,
-  `authCodeExpires` datetime DEFAULT NULL,
-  `isVerify` tinyint(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `email`, `hash_password`, `username`, `role`, `name`, `birthday`, `avatar_url`, `phone`, `about`, `specialization`, `googleId`, `auth_type`, `authCode`, `authCodeExpires`, `isVerify`) VALUES
-('00e813f9-59f4-40aa-bd60-1825d7606314', 'nguyen.quang.anh@sun-asterisk.com', '$2b$10$cBvpEOwiSgshDbkhyi1.h.chwJDUydU9eXXcU1rAAwuu4utoCSIqC', 'anhnq', 'Instructor', 'Nguyen Quang Anh', '2003-11-26', 'https://res.cloudinary.com/duminopj4/image/upload/v1723566594/avatars/j85gdmulf989lmwkbtjq.png', '0163456789', 'Data Engineer', 'Software Engineering', NULL, 'local', NULL, NULL, NULL),
-('123878ff-cd3d-4c94-aee3-cab0e0f6b27e', 'phamminhv@gmail.com', '$2b$10$WUum/TayekSCg7P2Guq69.aX02txwngO6Mfmo7uuMf6MdErhHjcwS', 'pmv', 'Instructor', 'Pham Minh Vuong', NULL, 'https://img.freepik.com/premium-photo/teacher-man-avatar-icon-illustration-vector-style_131965-789.jpg', NULL, 'Fullstack Engineer', 'Software Engineering', NULL, 'local', '', '2024-08-27 09:14:43', 1),
-('33202650-2e46-47b8-990b-a00b30b1897a', '21020425@vnu.edu.vn', '$2b$10$LpVhpxN860EUzFNOp1mtKu0XxjEjO4/ofqas/o.Spw3xvYhkslPi.', 'pmv21020425', 'Student', 'Phạm Minh Vương', NULL, 'https://res.cloudinary.com/duminopj4/image/upload/v1724822294/avatars/rfeijbthorjtzjb67jjz.png', '', '', 'Software Engineering', NULL, 'local', NULL, NULL, NULL),
-('378e1954-1a85-458b-bfa1-d904070f1d58', 'pham.thi.hong.ngan@sun-asterisk.com', '$2b$10$icM9rab8qK4mTumhXFIhMOGVay16oCHZkArBfWnXhpJ4H/z9NhaWK', 'nganpth', 'Student', 'Pham Thi Hong Ngan', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
-('531fcba4-b7cd-45da-8ec3-184b8e88e949', 'admin@sun-asterisk.com', '$2b$10$DjxAkWALpyHKWtdxyxCwYO4l5ZF7jyRcRTBr56OOruPLelb8El.cy', 'admin', 'Admin', 'Admin', NULL, 'https://visualpharm.com/assets/381/Admin-595b40b65ba036ed117d3b23.svg', NULL, 'Administrator of the e-learning system', '', NULL, 'local', '389810', '2024-08-26 14:55:26', 1),
-('54a859af-3995-441b-9537-695ae8215f7f', 'pham.minh.vuong@sun-asterisk.com', '$2b$10$BLbF9caDi4vwDoamEtdRJu.3P8eDhwDXlZrq3j8LBHvuA2nsezIjm', 'Pham', 'Student', 'Pham Minh Vuong', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocJztVisEp1b8SQ9_VFa8bLrr--dY2A8g_LAaq2LG49HWZdbtw=s96-c', NULL, NULL, '', '101793049225580013760', 'google', NULL, NULL, NULL),
-('5877df58-ad78-4833-8b04-175e72b6e3db', 'phamminhvuong@sun-asterisk.com', '$2b$10$WG07nnnu2oTuocMBH.j99.GUsqMfsgtPvyQExBp3pFivu.VaeZlzG', 'vuongpm-0516', 'Student', 'Phạm Minh Vương', '2003-07-11', 'https://res.cloudinary.com/duminopj4/image/upload/v1723599243/avatars/wuw6y3cvthh3nj5t8itm.png', '0365011703', '', 'Software Engineering', NULL, 'local', '443580', '2024-08-26 17:32:40', 1),
-('66aea26c-394a-4cd0-bfe7-4237b7391c35', 'phamminhv26@gmail.com', '$2b$10$RIdSCKHxfUFeEePhflqJKOr8HWdP954mctkx5JkUPZNC8pfrmFDTm', 'NewInstructor', 'Instructor', 'Nguyen Xuan Hoa', NULL, NULL, NULL, '', 'Software Engineering', NULL, 'local', '', '2024-08-27 09:43:27', 1),
-('7b1719e9-338a-4f8e-a8e3-918c8f9663c3', 'cao.thi.phuong.anh@sun-asterisk.com', '$2b$10$8Am90XB9ErV./evmEAvlgubarZXfz1euBTqUuIsXrxu.5vZ6Vyosm', 'anhctp', 'Student', 'Cao Thi Phuong Anh', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
-('8f2e6682-dc87-484f-929b-abac2e193963', 'pmv@vnu.edu.vn', '$2b$10$omQrH5lNMvwvpzt1kWKVC.8YsUOb/BYIb6LRrmnKfJh/Pra1Z..P2', '21020425', 'Student', '21020425 Phạm Minh Vương', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocJpyghwyPptuWuJyOY6dbmZZ3jysRGpFEtN-tapQpbfIQYRPIYv=s96-c', NULL, NULL, '', '107661232468707080560', 'google', NULL, NULL, NULL),
-('ad11ffa9-f4b0-4e8b-bbf0-e0f16c3854ce', 'zuanki@gmail.com', '$2b$10$dzOiO8hEwb/gjc4uPgaMWudDud43ta32ObURJP/WuWALjrk/CKYa2', 'hoanx', 'Instructor', 'Nguyen Xuan Hoa', '2003-07-31', 'https://res.cloudinary.com/duminopj4/image/upload/v1724554351/avatars/ghbmb6q83mdbmmh6rhc6.jpg', '0123456789', 'AI Engineer', 'AI Machine Learning', NULL, 'local', '625962', '2024-08-26 14:53:37', 1),
-('b6281679-02c0-4543-a7fb-210429105267', 'harry@gmail.com', '$2b$10$4vkwdob2tienYniKNc3AiOQbf7.evvwc7H9LH4StoNVAkGy3r5ulK', 'kane', 'Student', 'Harry Kane', NULL, NULL, NULL, NULL, '', NULL, 'local', NULL, NULL, NULL),
-('fc8ebe65-85b5-4a05-a13e-7ee5307ec67a', 'phamminh@gmail.com', '$2b$10$tn0ShXtn5sNOwpRdtGOkwOfnlGN1rnHhyiEqC8B/syFKrIv7Yf.Yi', 'minhvuong', 'Pending Approval', 'Pham Minh Vuong', NULL, NULL, NULL, '', 'Cyber Security', NULL, 'local', NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
