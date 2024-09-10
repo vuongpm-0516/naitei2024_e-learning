@@ -1,0 +1,85 @@
+services:
+  - type: web
+    name: e-learning-web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromService:
+          name: e-learning-db
+          type: pserv
+          property: host
+      - key: DB_PASSWORD
+        sync: false
+    autoDeploy: false
+    dependsOn:
+      - e-learning-db
+      - phpmyadmin-container
+    plan: free
+
+  - type: web
+    name: nginx
+    env: docker
+    image: nginx:alpine
+    ports:
+      - port: 80
+    envVars:
+      - key: DOMAIN
+        sync: false
+      - key: PORT
+        sync: false
+    autoDeploy: false
+    volumes:
+      - path: ./nginx/nginx.conf
+        mountPath: /etc/nginx/nginx.conf
+      - path: ./nginx/templates
+        mountPath: /etc/nginx/templates
+    dependsOn:
+      - e-learning-web
+
+  - type: web
+    name: phpmyadmin-container
+    env: docker
+    image: phpmyadmin:latest
+    ports:
+      - port: 8080
+    envVars:
+      - key: PMA_HOST
+        fromService:
+          name: e-learning-db
+          type: pserv
+          property: host
+    autoDeploy: false
+    dependsOn:
+      - e-learning-db
+
+  - type: pserv
+    name: e-learning-db
+    image: mysql:latest
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        sync: false
+    autoDeploy: false
+    volumes:
+      - name: db-volume
+        mountPath: /var/lib/mysql
+      - path: ./src/sql/e_learning.sql
+        mountPath: /docker-entrypoint-initdb.d/init.sql
+    healthCheckCommand: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+    healthCheckIntervalSeconds: 20
+    healthCheckTimeoutSeconds: 10
+    healthCheckRetries: 5
+
+volumes:
+  db-volume:
+    name: db-volume
+  web-volume:
+    name: web-volume
+  node-volume:
+    name: node-volume
